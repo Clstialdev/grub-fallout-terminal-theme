@@ -171,7 +171,7 @@ install: check check-deps all
 	@[ -d $(INSTALL_DIR)/$(THEME_DIR) ] && rm -rf $(INSTALL_DIR)/$(THEME_DIR) || true
 	@mkdir -p $(INSTALL_DIR)
 	@cp -r $(BUILD_DIR) $(INSTALL_DIR)/$(THEME_DIR)
-	@sed -i '/GRUB_TERMINAL\s*=/ s/^#*/#/' $(GRUB_CONFIG)
+	@sed -i '/^GRUB_TERMINAL[ _A-Z]*=/ s/^/#/' $(GRUB_CONFIG)
 	@sed -i '\|GRUB_THEME=$(INSTALL_DIR)/$(THEME_DIR)/theme|d' $(GRUB_CONFIG)
 	@echo 'GRUB_THEME=$(INSTALL_DIR)/$(THEME_DIR)/theme' >> $(GRUB_CONFIG)
 	@$(GRUB_MKCONFIG) -o $(GRUB_CFG)
