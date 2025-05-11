@@ -43,8 +43,10 @@ REQUIRED_CMDS := $(GRUB_MKFONT):$(GRUB_PKG) magick:imagemagick $(GRUB_MKCONFIG):
 
 # Customizable properties.
 BACKGROUND_SIZE   := 1920x1080
-FONT_SIZE         := 20
-ICON_SIZE         := 24
+FONT_SIZE         := 64
+ICON_SIZE         := 42
+SCAN_OPACITY 	  := 45
+VAULT_BOY_SCALE   := 60
 THEME_COLOR       := 25d46c
 BACKGROUND_COLOR  := black
 SELECTED_FG_COLOR := white
@@ -98,13 +100,33 @@ $(BUILD_DIR):
 $(BUILD_DIR)/icons: | $(BUILD_DIR)
 	mkdir -p $@
 
-$(bg): scanline.png vaultboy.png | $(BUILD_DIR)
-	@echo "Generating background image..."
-	@magick scanline.png -fuzz 100% -fill '#$(THEME_COLOR)' -opaque white \
-		-background '$(BACKGROUND_COLOR)' -alpha remove - |\
-		magick -size '$(BACKGROUND_SIZE)' tile:- -strip $@
-	@magick vaultboy.png -resize $(bg_w) -scale 25% -fuzz 100% -fill '#$(THEME_COLOR)' -opaque white - |\
-		magick $@ - -gravity SouthEast -geometry +40+40 -composite -strip png32:$@
+$(bg): scanline.png vaultboy.png
+	@mkdir -p $(dir $@)
+	@echo "Building Fallout GRUB background…"
+
+	gm convert scanline.png \
+	           -fill '#$(THEME_COLOR)' -opaque white \
+	           PNG32:scanline_t.png
+
+	gm convert -size $(BACKGROUND_SIZE) xc:black bg_scan.png
+
+	gm composite -dissolve $(SCAN_OPACITY) -tile scanline_t.png \
+	             bg_scan.png bg_scan.png
+
+	gm convert vaultboy.png \
+	           -fill '#$(THEME_COLOR)' -opaque white \
+	           -resize $(VAULT_BOY_SCALE)% \
+	           PNG32:vboy_t.png
+
+	gm composite -dissolve $(SCAN_OPACITY) \
+             -gravity SouthEast -geometry +40+40 \
+             vboy_t.png bg_scan.png $@
+
+	rm -f scanline_t.png bg_scan.png vboy_t.png
+	@echo "✔ Created $@"
+
+
+
 
 $(sel): | $(BUILD_DIR)
 	@echo "Generating selection highlight..."
@@ -126,6 +148,7 @@ $(theme): theme | $(BUILD_DIR)
 	@sed -i 's/@iconsize@/$(ICON_SIZE)/' $@
 	@sed -i 's/@themecolor@/#$(THEME_COLOR)/' $@
 	@sed -i 's/@selectedfgcolor@/$(SELECTED_FG_COLOR)/' $@
+	@sed -i 's/@fontsize@/$(FONT_SIZE)/' $@
 
 clean:
 	@echo "Cleaning build directory..."
@@ -187,6 +210,6 @@ uninstall: check
 
 preview:
 	@echo "Starting GRUB emulator preview..."
-	@sleep 5 && kill -9 `pidof grub2-emu` 2>/dev/null || true &
+	@sleep 5 && kill -9 pidof grub2-emu 2>/dev/null || true &
 	@grub2-emu || { echo "Error: grub2-emu not found. Please install grub2-tools-extra package." >&2; exit 1; }
 	@reset
