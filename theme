@@ -20,6 +20,10 @@ desktop-image  : "background.png"
     icon_height                = "@iconsize@"
     item_icon_space            = "20"
     selected_item_pixmap_style = "selected_*.png"
+    item_padding               = "5"
+    item_spacing               = "10"
+    item_align                 = "left"
+    item_pixmap_style          = "*.png"
 }
 
 + label {
@@ -71,4 +75,13 @@ desktop-image  : "background.png"
     color = "@themecolor@"
     font  = "@font@"
     text  = "↑↓: select, 'c': command-line, 'e': edit"
+}
+
++ progress_bar {
+    left   = "15%"
+    top    = "98%-30"
+    width  = "70%"
+    height = "20"
+    fg_color = "@themecolor@"
+    bg_color = "#000000"
 }
