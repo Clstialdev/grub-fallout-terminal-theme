@@ -1,48 +1,119 @@
-GRUB Fallout terminal theme
-===========================
+# GRUB Fallout Terminal Theme
 
-A graphical theme for the [GNU GRUB 2][1] bootloader. This theme is inspired by the looks of [terminals][2] in Fallout, which is my favorite video game series.
+A modern graphical theme for the [GNU GRUB 2][1] bootloader, inspired by the iconic [terminals][2] from the Fallout series. This theme brings the post-apocalyptic aesthetic to your boot screen with a fully customizable experience.
 
 ![screenshot][screenshot-img]
 
-About
------
+## Features
 
-This theme was designed with the intent to provide a fully customizable experience (specially for advanced users). In fact, the source for any component used by the theme is provided in native format (for example XCF Gimp native images instead of JPEGs or PNGs). This is something I built in my free time purely for fun.
+- Authentic Fallout terminal aesthetic
+- Fully customizable colors and dimensions
+- Modern GRUB 2 compatibility
+- Progress bar for boot timeout
+- Improved menu item styling
+- High-resolution support
+- Easy installation and customization
 
-Building and installaton
--------------------------
+## Prerequisites
 
-Tools needed for building are `xcftools` and `imagemagick`, available on most major distributions through the default package manager (Gimp is *not* needed).
+Before installing, ensure you have the following packages installed:
 
-Build and install using `make`:
+```bash
+# For Fedora/RHEL-based systems:
+sudo dnf install grub2-tools ImageMagick xcf2png
 
-	$ make
-	$ sudo make install
+# For Debian/Ubuntu-based systems:
+sudo apt install grub2-common imagemagick xcftools
+```
 
-Uninstall:
+## Installation
 
-	$ sudo make uninstall
+1. Clone this repository:
+```bash
+git clone https://github.com/yourusername/grub-fallout-terminal-theme.git
+cd grub-fallout-terminal-theme
+```
 
-Customization
--------------
+2. Build and install the theme:
+```bash
+make
+sudo make install
+```
 
-Several options can be configured either editing the `Makefile` directly or passing them to `make` when building:
+3. Reboot your system to see the changes:
+```bash
+sudo reboot
+```
 
-	$ make OPTION1=value1 OPTION2=value2 ...
+## Preview
 
-Run `make clean` to remove previously built files before re-building with different options.
+To preview the theme without installing:
+```bash
+sudo make preview
+```
 
-### List of available options:
+## Uninstallation
 
- - `BACKGROUND_SIZE`: size of the background, in pixels, in the form `WxH`. Used to adjust the size of the scanlines and the position of the Vault Boy. A background size bigger than your display size can be chosen to make the scanlines appear more narrow (which is exactly what was done to create the screenshot above).
- - `FONT_SIZE`: font size to be used for all the text in GRUB's menu, in pt.
- - `ICON_SIZE`: size of the icons for boot entries, in pixels. Icons will be compiled to PNG and resized to this size to save space.
- - `THEME_COLOR`: main color of the theme, strictly in HTML 6-digit hex format. This is used as color for text, icons, terminal scanlines and the Vault Boy.
- - `BACKGROUND_COLOR`: screen background color, in any valid CSS color notation. This is the background color that will be applied *behind* the scanlines of the terminal screen.
- - `SELECTED_FG_COLOR`: text color for the selected boot menu entry, in HTML 6-digit hex format or valid HTML color name.
- - `SELECTED_BG_COLOR`: background color for the selected boot menu entry, in any valid CSS color notation. This is by default derived from the `THEME_COLOR`, but can be manually set to any other value.
+To remove the theme:
+```bash
+sudo make uninstall
+```
 
- [screenshot-img]: https://i.imgur.com/szAdrXa.png
- [1]: https://www.gnu.org/software/grub/
- [2]: http://fallout.wikia.com/wiki/Terminal
+## Customization
+
+The theme is highly customizable through the `Makefile`. You can modify these options either by editing the `Makefile` directly or by passing them to `make`:
+
+```bash
+make OPTION1=value1 OPTION2=value2 ...
+```
+
+### Available Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `BACKGROUND_SIZE` | Background dimensions in pixels (WxH) | 1920x1080 |
+| `FONT_SIZE` | Font size for menu text (pt) | 20 |
+| `ICON_SIZE` | Size of boot entry icons (px) | 24 |
+| `THEME_COLOR` | Main theme color (6-digit hex) | 25d46c |
+| `BACKGROUND_COLOR` | Screen background color | black |
+| `SELECTED_FG_COLOR` | Selected entry text color | white |
+| `SELECTED_BG_COLOR` | Selected entry background | THEME_COLOR40 |
+
+### Examples
+
+To create a theme with a different color scheme:
+```bash
+make THEME_COLOR=ff0000 BACKGROUND_COLOR=#000033
+```
+
+To adjust the size for a smaller screen:
+```bash
+make BACKGROUND_SIZE=1366x768 FONT_SIZE=16
+```
+
+## Troubleshooting
+
+If you encounter any issues:
+
+1. Ensure all prerequisites are installed
+2. Check that GRUB is properly configured
+3. Verify file permissions
+4. Check the GRUB configuration file at `/etc/default/grub`
+
+## Contributing
+
+Contributions are welcome! Feel free to submit issues and pull requests.
+
+## License
+
+This project is licensed under the terms of the license included in the repository.
+
+## Acknowledgments
+
+- Inspired by the Fallout series by Bethesda Game Studios
+- Built on [GNU GRUB 2][1]
+- Original theme concept by the original author
+
+[screenshot-img]: https://i.imgur.com/szAdrXa.png
+[1]: https://www.gnu.org/software/grub/
+[2]: http://fallout.wikia.com/wiki/Terminal
